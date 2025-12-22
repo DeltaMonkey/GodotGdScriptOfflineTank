@@ -59,16 +59,12 @@ func move_tank():
 		# Update movement from keypress
 		if Input.is_action_just_pressed("ui_down") and MoveDirection != Vector2.UP:
 			select_move_to_direction(Vector2.DOWN)
-			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 180
 		if Input.is_action_just_pressed("ui_up") and MoveDirection != Vector2.DOWN:
 			select_move_to_direction(Vector2.UP)
-			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 360
 		if Input.is_action_just_pressed("ui_left") and MoveDirection != Vector2.RIGHT:
 			select_move_to_direction(Vector2.LEFT)
-			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 270
 		if Input.is_action_just_pressed("ui_right") and MoveDirection != Vector2.LEFT:
 			select_move_to_direction(Vector2.RIGHT)
-			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 90
 
 
 func select_move_to_direction(direction: Vector2) -> void:
@@ -91,7 +87,7 @@ func _on_move_timer_timeout() -> void:
 	if !check_out_of_bounds():
 		PlayerTankPositionData -= MoveDirection
 	PlayerTank.position = (PlayerTankPositionData * CellSize) + Vector2(0, CellSize) 
-
+	(PlayerTank.get_node("TankBodySprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MoveDirection.angle()) + 90
 
 func check_out_of_bounds() -> bool:
 	if PlayerTankPositionData.x < 0 or PlayerTankPositionData.x > Cells - 1 or PlayerTankPositionData.y < 1 or PlayerTankPositionData.y > Cells:
