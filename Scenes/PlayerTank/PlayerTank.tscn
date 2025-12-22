@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8ceiml48awcl"]
+[gd_scene load_steps=3 format=3 uid="uid://c8ceiml48awcl"]
 
+[ext_resource type="Script" uid="uid://nnc1k0u8w2l3" path="res://Scenes/PlayerTank/PlayerTank.gd" id="1_c5gk0"]
 [ext_resource type="Texture2D" uid="uid://bida34ay20oeg" path="res://Assets/kenney_top-down-tanks-redux/PNG/Default size/tank_green.png" id="1_ksagf"]
 
 [node name="PlayerTank" type="Node2D"]
+script = ExtResource("1_c5gk0")
 metadata/_edit_horizontal_guides_ = [32.0]
 metadata/_edit_vertical_guides_ = [32.0]
 

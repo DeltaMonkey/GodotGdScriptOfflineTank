@@ -3,12 +3,15 @@ extends Node
 
 @export var PlayerTankScene: PackedScene
 
+
 @onready var MoveTimer: Timer = $MoveTimer
 @onready var HUD: CanvasLayer = $HUD
+
 
 # Game variables
 var Score: int
 var GameStarted: bool = false
+
 
 # Grid variables
 var Cells: int = 16 # each row
@@ -18,6 +21,7 @@ var CellSize: int = 32
 # Player Positions
 var PlayerTankPositionData: Vector2 # position for matrix
 var PlayerTank: Node2D
+
 
 # Movement variables
 var StartPos: Vector2 = Vector2(7, 7)
@@ -55,12 +59,16 @@ func move_tank():
 		# Update movement from keypress
 		if Input.is_action_just_pressed("ui_down") and MoveDirection != Vector2.UP:
 			select_move_to_direction(Vector2.DOWN)
+			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 180
 		if Input.is_action_just_pressed("ui_up") and MoveDirection != Vector2.DOWN:
 			select_move_to_direction(Vector2.UP)
+			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 360
 		if Input.is_action_just_pressed("ui_left") and MoveDirection != Vector2.RIGHT:
 			select_move_to_direction(Vector2.LEFT)
+			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 270
 		if Input.is_action_just_pressed("ui_right") and MoveDirection != Vector2.LEFT:
 			select_move_to_direction(Vector2.RIGHT)
+			(PlayerTank.get_node("TankBodySprite") as Node2D).global_rotation_degrees = 90
 
 
 func select_move_to_direction(direction: Vector2) -> void:
