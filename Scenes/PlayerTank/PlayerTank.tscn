@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8ceiml48awcl"]
+
+[ext_resource type="Texture2D" uid="uid://bida34ay20oeg" path="res://Assets/kenney_top-down-tanks-redux/PNG/Default size/tank_green.png" id="1_ksagf"]
+
+[node name="PlayerTank" type="Node2D"]
+metadata/_edit_horizontal_guides_ = [32.0]
+metadata/_edit_vertical_guides_ = [32.0]
+
+[node name="TankBodySprite" type="Sprite2D" parent="."]
+position = Vector2(16, 16)
+scale = Vector2(0.7616667, 0.69571304)
+texture = ExtResource("1_ksagf")
+flip_v = true
