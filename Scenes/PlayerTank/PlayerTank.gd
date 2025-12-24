@@ -1,6 +1,9 @@
 extends Node2D
 
 
+@export var BulletSecene: PackedScene
+
+
 @onready var MoveTimer: Timer = $MoveTimer
 
 
@@ -30,6 +33,21 @@ func move_tank():
 			select_move_to_direction(Vector2.LEFT)
 		if Input.is_action_just_pressed("ui_right") and MoveDirection != Vector2.LEFT:
 			select_move_to_direction(Vector2.RIGHT)
+		
+	if Input.is_action_just_pressed("ui_accept"):
+		shoot()
+
+
+func shoot() -> void:
+	var bulletStartPosition: Vector2 = Vector2(GameManager.PlayerTankPositionData.x, GameManager.PlayerTankPositionData.y) + MoveDirection
+	var bullet = BulletSecene.instantiate()
+	var instanceId: String = str(bullet.get_instance_id())
+	GameManager.BulletsPositionData[instanceId] = bulletStartPosition
+	bullet.position = (Vector2(GameManager.BulletsPositionData[instanceId].x, GameManager.BulletsPositionData[instanceId].y)  * GameManager.CellSize) + Vector2(0, GameManager.CellSize)
+	(bullet.get_node("BulletSprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MoveDirection.angle()) + 90
+	get_tree().root.get_node("Main").add_child(bullet)
+	(bullet as Bullet).set_move_direction(MoveDirection)
+	GameManager.Bullets[instanceId] = bullet
 
 
 func select_move_to_direction(direction: Vector2) -> void:
