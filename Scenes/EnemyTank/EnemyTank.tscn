@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://1nlp8a2qrt5e"]
+[gd_scene load_steps=3 format=3 uid="uid://1nlp8a2qrt5e"]
 
 [ext_resource type="Texture2D" uid="uid://b4j6rvuaj2cid" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/tank_red.png" id="1_gi7le"]
+[ext_resource type="Script" uid="uid://nw0cl04135gc" path="res://Scenes/EnemyTank/EnemyTank.gd" id="1_xi5ym"]
 
 [node name="EnemyTank" type="Node2D"]
+script = ExtResource("1_xi5ym")
 
 [node name="TankBodySprite" type="Sprite2D" parent="."]
 position = Vector2(16.000002, 16)
@@ -12,3 +14,5 @@ flip_v = true
 
 [node name="MoveTimer" type="Timer" parent="."]
 wait_time = 0.4
+
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]

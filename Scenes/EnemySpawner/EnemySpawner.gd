@@ -20,7 +20,6 @@ func spawn_enemy() -> void:
 	var instanceId: String = str(enemyTank.get_instance_id())
 	GameManager.EnemyTankPositionData[instanceId] = SpawnerMatrixPosition
 	enemyTank.position = (GameManager.EnemyTankPositionData[instanceId]  * GameManager.CellSize) + Vector2(0, GameManager.CellSize)
-	print(enemyTank.position)
 	get_tree().root.get_node("Main").add_child(enemyTank)
 	GameManager.EnemyTanks[instanceId] = enemyTank
 

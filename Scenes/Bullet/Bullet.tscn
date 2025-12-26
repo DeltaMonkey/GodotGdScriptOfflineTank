@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://ccyu0og8jl6jx"]
 
-[ext_resource type="Texture2D" uid="uid://cma1kij8nf5dq" path="res://Assets/kenney_top-down-tanks-redux/PNG/Default size/bulletGreen1.png" id="1_7u3a6"]
 [ext_resource type="Script" uid="uid://cham7baw74ove" path="res://Scenes/Bullet/Bullet.gd" id="1_jy0d1"]
 [ext_resource type="PackedScene" uid="uid://o1chn8isuw10" path="res://Scenes/Explotion1/Explotion1.tscn" id="2_nijle"]
+[ext_resource type="Texture2D" uid="uid://b6t2ltqbr5im1" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/bulletGreen1_outline.png" id="3_nijle"]
 
 [node name="Bullet" type="Node2D"]
 script = ExtResource("1_jy0d1")
@@ -10,7 +10,8 @@ Explotion1Scene = ExtResource("2_nijle")
 
 [node name="BulletSprite" type="Sprite2D" parent="."]
 position = Vector2(16, 16)
-texture = ExtResource("1_7u3a6")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_nijle")
 
 [node name="MoveTimer" type="Timer" parent="."]
 wait_time = 0.1

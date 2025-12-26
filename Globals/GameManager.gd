@@ -1,5 +1,6 @@
 extends Node
 
+
 # Player Variables
 var PlayerTankPositionData: Vector2 # position for matrix
 var PlayerTank: Node2D
@@ -16,6 +17,7 @@ var BaseDoor: Node2D
 
 
 # Enemy Variables
+enum EnemyStates { IDLE, PATROL, CHASE }  
 var EnemyTankPositionData: Dictionary
 var EnemyTanks: Dictionary
 
