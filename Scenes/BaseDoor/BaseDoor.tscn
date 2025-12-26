@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://coxm1rwd8rkri"]
+
+[ext_resource type="Texture2D" uid="uid://jf7pfsg3x3vp" path="res://Assets/kenney_rolling-ball-assets/PNG/Retina/block_locked_small.png" id="1_37ij4"]
+
+[node name="BaseDoor" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, 16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_37ij4")

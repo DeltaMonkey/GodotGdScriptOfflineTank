@@ -67,7 +67,7 @@ func _on_move_timer_timeout() -> void:
 	CanMove = true
 	# Use the player's previous position to move
 	GameManager.PlayerTankPositionData += MoveDirection
-	if !check_out_of_bounds():
+	if !check_out_of_bounds() or check_wall_collision():
 		GameManager.PlayerTankPositionData -= MoveDirection
 	GameManager.PlayerTank.position = (GameManager.PlayerTankPositionData * GameManager.CellSize) + Vector2(0, GameManager.CellSize) 
 	(GameManager.PlayerTank.get_node("TankBodySprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MoveDirection.angle()) + 90
@@ -80,3 +80,7 @@ func check_out_of_bounds() -> bool:
 		or GameManager.PlayerTankPositionData.y > GameManager.Cells):
 		return false
 	return true
+
+
+func check_wall_collision() -> bool:
+	return GameManager.PlayerTankPositionData == GameManager.BaseDoorPositionData

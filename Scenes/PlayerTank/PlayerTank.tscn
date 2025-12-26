@@ -17,6 +17,6 @@ texture = ExtResource("1_ksagf")
 flip_v = true
 
 [node name="MoveTimer" type="Timer" parent="."]
-wait_time = 0.4
+wait_time = 0.3
 
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]

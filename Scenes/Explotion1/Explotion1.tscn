@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://o1chn8isuw10"]
+
+[ext_resource type="Script" uid="uid://dkisbcre7rrca" path="res://Scenes/Explotion1/Explotion1.gd" id="1_mx1nh"]
+[ext_resource type="Texture2D" uid="uid://d0rabtsqltqmt" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/explosion1.png" id="1_xh4vy"]
+[ext_resource type="Texture2D" uid="uid://cr2kc1hoyxufv" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/explosion2.png" id="2_mx1nh"]
+[ext_resource type="Texture2D" uid="uid://ht11x7y6pv74" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/explosion3.png" id="3_yeut6"]
+[ext_resource type="Texture2D" uid="uid://w6mu04muqkme" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/explosion4.png" id="4_5to7m"]
+[ext_resource type="Texture2D" uid="uid://by1lxnp85rlnv" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/explosion5.png" id="5_e8iio"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1rlev"]
+animations = [{
+"frames": [{
+"duration": 0.25,
+"texture": ExtResource("1_xh4vy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_mx1nh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_yeut6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_5to7m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_e8iio")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Explotion1" type="Node2D"]
+script = ExtResource("1_mx1nh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(16, 16)
+scale = Vector2(0.2971698, 0.30769232)
+sprite_frames = SubResource("SpriteFrames_1rlev")
+autoplay = "default"
+frame = 4
+frame_progress = 1.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

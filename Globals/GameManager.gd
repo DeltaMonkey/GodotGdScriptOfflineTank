@@ -10,6 +10,11 @@ var BulletsPositionData: Dictionary
 var Bullets: Dictionary
 
 
+# Base Variables
+var BaseDoorPositionData: Vector2 # position for matrix
+var BaseDoor: Node2D
+
+
 # Grid variables
 var Cells: int = 16 # each row
 var CellSize: int = 32

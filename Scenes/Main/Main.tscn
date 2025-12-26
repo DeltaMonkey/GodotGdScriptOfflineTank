@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://bslgl6reby1ye"]
+[gd_scene load_steps=8 format=4 uid="uid://bslgl6reby1ye"]
 
 [ext_resource type="Script" uid="uid://by2yqdt0nanq8" path="res://Scenes/Main/Main.gd" id="1_cmk6n"]
 [ext_resource type="Texture2D" uid="uid://d4apai0v0na8i" path="res://Assets/kenney_rolling-ball-assets/PNG/Default/background_blue.png" id="1_p8rbg"]
 [ext_resource type="PackedScene" uid="uid://c8ceiml48awcl" path="res://Scenes/PlayerTank/PlayerTank.tscn" id="2_i3fi7"]
 [ext_resource type="PackedScene" uid="uid://bxpr05dp3bwqs" path="res://Scenes/HUD/HUD.tscn" id="2_qtv3y"]
+[ext_resource type="PackedScene" uid="uid://coxm1rwd8rkri" path="res://Scenes/BaseDoor/BaseDoor.tscn" id="3_o8wgc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qtv3y"]
 texture = ExtResource("1_p8rbg")
@@ -17,6 +18,7 @@ sources/0 = SubResource("TileSetAtlasSource_qtv3y")
 [node name="Main" type="Node"]
 script = ExtResource("1_cmk6n")
 PlayerTankScene = ExtResource("2_i3fi7")
+BaseDoorScene = ExtResource("3_o8wgc")
 
 [node name="Background" type="TileMapLayer" parent="."]
 position = Vector2(0, 64)
