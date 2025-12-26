@@ -43,9 +43,8 @@ func _on_move_timer_timeout() -> void:
 	if !check_out_of_bounds():
 		pass
 		queue_free()
-	
-	GameManager.Bullets[instanceId].position = (GameManager.BulletsPositionData[instanceId] * GameManager.CellSize) + Vector2(0, GameManager.CellSize) 
-	print(GameManager.Bullets[instanceId].position)
+	var tween: Tween = create_tween()
+	tween.tween_property(GameManager.Bullets[instanceId], "position", (GameManager.BulletsPositionData[instanceId] * GameManager.CellSize) + Vector2(0, GameManager.CellSize)  , 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
 	(GameManager.Bullets[instanceId].get_node("BulletSprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MoveDirection.angle()) + 90
  
 

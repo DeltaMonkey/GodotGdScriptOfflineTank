@@ -69,7 +69,8 @@ func _on_move_timer_timeout() -> void:
 	GameManager.PlayerTankPositionData += MoveDirection
 	if !check_out_of_bounds() or check_wall_collision():
 		GameManager.PlayerTankPositionData -= MoveDirection
-	GameManager.PlayerTank.position = (GameManager.PlayerTankPositionData * GameManager.CellSize) + Vector2(0, GameManager.CellSize) 
+	var tween: Tween = create_tween()
+	tween.tween_property(GameManager.PlayerTank, "position", (GameManager.PlayerTankPositionData * GameManager.CellSize) + Vector2(0, GameManager.CellSize) , 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
 	(GameManager.PlayerTank.get_node("TankBodySprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MoveDirection.angle()) + 90
 
 
