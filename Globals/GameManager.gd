@@ -15,6 +15,11 @@ var BaseDoorPositionData: Vector2 # position for matrix
 var BaseDoor: Node2D
 
 
+# Enemy Variables
+var EnemyTankPositionData: Dictionary
+var EnemyTanks: Dictionary
+
+
 # Grid variables
 var Cells: int = 16 # each row
 var CellSize: int = 32

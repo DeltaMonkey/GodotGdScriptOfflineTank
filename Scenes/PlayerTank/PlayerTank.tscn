@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c8ceiml48awcl"]
 
 [ext_resource type="Script" uid="uid://nnc1k0u8w2l3" path="res://Scenes/PlayerTank/PlayerTank.gd" id="1_c5gk0"]
-[ext_resource type="Texture2D" uid="uid://bida34ay20oeg" path="res://Assets/kenney_top-down-tanks-redux/PNG/Default size/tank_green.png" id="1_ksagf"]
 [ext_resource type="PackedScene" uid="uid://ccyu0og8jl6jx" path="res://Scenes/Bullet/Bullet.tscn" id="2_u6vfl"]
+[ext_resource type="Texture2D" uid="uid://d3jikaj8280ih" path="res://Assets/kenney_top-down-tanks-redux/PNG/Retina/tank_green.png" id="3_u6vfl"]
 
 [node name="PlayerTank" type="Node2D"]
 script = ExtResource("1_c5gk0")
@@ -11,12 +11,12 @@ metadata/_edit_horizontal_guides_ = [32.0]
 metadata/_edit_vertical_guides_ = [32.0]
 
 [node name="TankBodySprite" type="Sprite2D" parent="."]
-position = Vector2(16, 16)
-scale = Vector2(0.7616667, 0.69571304)
-texture = ExtResource("1_ksagf")
+position = Vector2(16, 15.996799)
+scale = Vector2(0.3809524, 0.34789565)
+texture = ExtResource("3_u6vfl")
 flip_v = true
 
 [node name="MoveTimer" type="Timer" parent="."]
-wait_time = 0.3
+wait_time = 0.4
 
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
