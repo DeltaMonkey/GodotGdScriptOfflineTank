@@ -16,7 +16,7 @@ var GameMapMatrix: Array[Array] = [
 		['0', '*', '0', 's'],
 		['*', '*', '*', '*'],
 		['0', '*', '0', '*'],
-		['*', 'd', '*', '*']
+		['*', 'd', '0', '*']
 	]
 
 
@@ -29,15 +29,15 @@ var CanMove
 func _ready() -> void:
 	MoveDirection = Vector2.UP
 	CanMove = true
-	print(shortest_path())
+	shortest_path(GameMapMatrix)
 
 
-func shortest_path() -> int:
-	var n = GameMapMatrix.size()
-	var m = GameMapMatrix[0].size()
+func shortest_path(gameMapMatrix: Array[Array]) -> Array[BreadthFirstSearchNode]:
+	var n = gameMapMatrix.size()
+	var m = gameMapMatrix[0].size()
 
 	# Direction vectors for moving: up, down, left, right
-	var dRow: Array = [-1, 1, 0, 0];
+	var dRow: Array = [1, -1, 0, 0];
 	var dCol: Array = [0, 0, -1, 1];
 
 	# Visited matrix to keep track of explored cells
@@ -49,40 +49,54 @@ func shortest_path() -> int:
 		visited.append(newRow)
 	
 	# Queue to perform BFS: stores {row, col, distance}
-	var queue: Array[Array]
+	var rowColDistQueue: Array[BreadthFirstSearchNode]
 	
 	# Find the source 's' in the matrix 
 	# and start BFS from it
 	for i in n:
 		for j in m:
-			if GameMapMatrix[i][j] == 's':
-				queue.append([i ,j, 0])
+			if gameMapMatrix[i][j] == 's':
+				rowColDistQueue.push_back(BreadthFirstSearchNode.new().create(i, j , 0))
 				visited[i][j] = true
 				break;
 	
+	var nodesToPath: Array[BreadthFirstSearchNode]
+	var pathToFollow: Array[BreadthFirstSearchNode]
+	
 	# Standard BFS loop
-	while queue.size() > 0:
-		var current: Array = queue.pop_front();
-		
-		var row: int = current[0]
-		var col: int = current[1]
-		var dist: int = current[2]
-		
+	while rowColDistQueue.size() > 0:
+		var currentNode: BreadthFirstSearchNode = rowColDistQueue.pop_front();
 		 # If destination 'd' is reached, return the distance
-		if GameMapMatrix[row][col] == 'd':
-			return dist
+		if gameMapMatrix[currentNode.Row][currentNode.Col] == 'd':
+			var pathFinalNode: BreadthFirstSearchNode = nodesToPath.pop_back()
+			pathToFollow.append(pathFinalNode)
+			var pathNextNode: BreadthFirstSearchNode = pathFinalNode
+			while pathToFollow.size() != pathFinalNode.Distance:
+				for i in nodesToPath.size():
+					# row col dist
+					if nodesToPath[i].Row == pathNextNode.BeforeNode.Row and nodesToPath[i].Col == pathNextNode.BeforeNode.Col and nodesToPath[i].Distance == pathNextNode.BeforeNode.Distance:
+						pathNextNode = nodesToPath[i]
+						pathToFollow.append(pathNextNode)
+			
+			for i in pathToFollow:
+				print("(", i.Row, ", ", i.Col, ") | ", i.Distance, " | BeforeNode: (", i.BeforeNode.Row, ", ", i.BeforeNode.Col, ") | ", i.BeforeNode.Distance, " | ")
+			
+			return pathToFollow
 		
 		# Explore all four adjacent directions
 		for i in 4:
-			var newRow: int  = row + dRow[i]
-			var newCol: int = col + dCol[i]
+			var newRow: int  = currentNode.Row + dRow[i]
+			var newCol: int = currentNode.Col + dCol[i]
 			
-			if is_valid(newRow, newCol, n, m, GameMapMatrix, visited):
+			if is_valid(newRow, newCol, n, m, gameMapMatrix, visited):
 				visited[newRow][newCol] = true
-				queue.append([newRow, newCol , dist + 1])
-		
+				var parentNode: BreadthFirstSearchNode = BreadthFirstSearchNode.new().create(currentNode.Row, currentNode.Col, currentNode.Distance)
+				var newCellToPath = BreadthFirstSearchNode.new().create(newRow, newCol, currentNode.Distance + 1, parentNode)
+				rowColDistQueue.append(newCellToPath)
+				nodesToPath.append(newCellToPath)
+	
 	# If no path to destination is found, return -1
-	return -1
+	return []
 
 
 func is_valid(row: int, col: int, n: int, m: int, mat: Array[Array], visited: Array[Array]) -> bool:
