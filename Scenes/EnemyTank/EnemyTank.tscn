@@ -15,4 +15,7 @@ flip_v = true
 [node name="MoveTimer" type="Timer" parent="."]
 wait_time = 0.4
 
+[node name="IdleTimer" type="Timer" parent="."]
+
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
+[connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]
