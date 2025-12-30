@@ -29,7 +29,25 @@ var CanMove
 func _ready() -> void:
 	MoveDirection = Vector2.UP
 	CanMove = true
-	shortest_path(GameMapMatrix)
+	
+	var gameMapMatrix: Array[Array] = calculate_game_map_matrix()
+	shortest_path(gameMapMatrix)
+
+
+func calculate_game_map_matrix() -> Array[Array]:
+	var gameMapMatrix: Array[Array]
+	for i in GameManager.Cells:
+		var gameMapRow: Array
+		for j in GameManager.Cells:
+			gameMapRow.append("*")
+		gameMapMatrix.append(gameMapRow)
+		
+	gameMapMatrix[GameManager.PlayerTankPositionData.y - 1][GameManager.PlayerTankPositionData.x] = 'd'
+	
+	var instanceId: String = str(get_instance_id())
+	gameMapMatrix[GameManager.EnemyTankPositionData[instanceId].y - 1][GameManager.EnemyTankPositionData[instanceId].x] = 's'
+	
+	return gameMapMatrix
 
 
 func shortest_path(gameMapMatrix: Array[Array]) -> Array[BreadthFirstSearchNode]:
