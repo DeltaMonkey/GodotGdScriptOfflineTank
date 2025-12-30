@@ -125,6 +125,7 @@ func ExecuteChase() -> void:
 				
 			TillChaseDistance = chaseMapMatrix.size() - 1
 			convert_chase_matrix_to_direction_array(chaseMapMatrix)
+			set_process(false)
 		else:
 			var moveDirection = ChaseDirections.pop_front()
 			if moveDirection:
@@ -237,12 +238,23 @@ func is_valid(row: int, col: int, n: int, m: int, mat: Array[Array], visited: Ar
 
 
 func convert_chase_matrix_to_direction_array(chaseMapMatrix: Array[BreadthFirstSearchNode]) -> void:
+	var instanceId: String = str(get_instance_id())
 	chaseMapMatrix.reverse()
 	for i in chaseMapMatrix.size():
 		print("ROW:" + str(chaseMapMatrix[i].Row) + " COL:" + str(chaseMapMatrix[i].Col))
 	for i in chaseMapMatrix.size() - 1:
 		#print("ROW:" + str(chaseMapMatrix[i].Row) + " COL:" + str(chaseMapMatrix[i].Col) + "| DIRECTION : ( " + str(chaseMapMatrix[i].Col-chaseMapMatrix[i+1].Col) + ", " + str(chaseMapMatrix[i].Row-chaseMapMatrix[i+1].Row) + " )")
-		var newDirection = Vector2((chaseMapMatrix[i].Col-chaseMapMatrix[i+1].Col) * -1, (chaseMapMatrix[i].Row-chaseMapMatrix[i+1].Row) * -1)
+		var newDirection: Vector2 = Vector2.ZERO
+		if(GameManager.PlayerTankPositionData.x > GameManager.EnemyTankPositionData[instanceId].x):
+			newDirection.x = (chaseMapMatrix[i].Col-chaseMapMatrix[i+1].Col) * -1
+		else:
+			newDirection.x = (chaseMapMatrix[i].Col-chaseMapMatrix[i+1].Col)
+			
+		if(GameManager.PlayerTankPositionData.y > GameManager.EnemyTankPositionData[instanceId].y):
+			newDirection.y = (chaseMapMatrix[i].Row-chaseMapMatrix[i+1].Row) * -1
+		else:
+			newDirection.y = (chaseMapMatrix[i].Row-chaseMapMatrix[i+1].Row) * -1
+		
 		ChaseDirections.append(newDirection)
 		if(newDirection == Vector2.UP):
 			print("UP")
