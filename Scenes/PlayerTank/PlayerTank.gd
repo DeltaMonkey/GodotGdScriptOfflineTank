@@ -72,7 +72,7 @@ func _on_move_timer_timeout() -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(GameManager.PlayerTank, "position", (GameManager.PlayerTankPositionData * GameManager.CellSize) + Vector2(0, GameManager.CellSize) , 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
 	(GameManager.PlayerTank.get_node("TankBodySprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MoveDirection.angle()) + 90
-
+	GameManager.GameStarted = false
 
 func check_out_of_bounds() -> bool:
 	if (GameManager.PlayerTankPositionData.x < 0 
