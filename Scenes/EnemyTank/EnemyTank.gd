@@ -12,26 +12,22 @@ var CurrentState: GameManager.EnemyStates = GameManager.EnemyStates.IDLE
 
 
 # Movement variables
-var GameMapMatrix: Array[Array] = [
-		['0', '*', '0', 's'],
-		['*', '*', '*', '*'],
-		['0', '*', '0', '*'],
-		['*', 'd', '0', '*']
-	]
-
-
-# Movement variables
-var MoveDirection: Vector2
 var CanMove
+
+# Patrol variables
+var TillPatrolDistance: int = 0 # until this variable zero continue to patrol procession
+var MovePatrolDirection: Vector2
+
+var PatrolDirectionsDefault: Array[Vector2] = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+var PatrolDirections: Array[Vector2] = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+var MinNodeToPatrol: int = 3;
+var MaxNodeToPatrol: int = 7;
+var PatrolInProgress: bool = false
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	MoveDirection = Vector2.UP
 	CanMove = true
-	
-	var gameMapMatrix: Array[Array] = calculate_game_map_matrix()
-	shortest_path(gameMapMatrix)
 
 
 func calculate_game_map_matrix() -> Array[Array]:
@@ -54,9 +50,11 @@ func shortest_path(gameMapMatrix: Array[Array]) -> Array[BreadthFirstSearchNode]
 	var n = gameMapMatrix.size()
 	var m = gameMapMatrix[0].size()
 
+
 	# Direction vectors for moving: up, down, left, right
 	var dRow: Array = [1, -1, 0, 0];
 	var dCol: Array = [0, 0, -1, 1];
+
 
 	# Visited matrix to keep track of explored cells
 	var visited: Array[Array]
@@ -96,8 +94,8 @@ func shortest_path(gameMapMatrix: Array[Array]) -> Array[BreadthFirstSearchNode]
 						pathNextNode = nodesToPath[i]
 						pathToFollow.append(pathNextNode)
 			
-			for i in pathToFollow:
-				print("(", i.Row, ", ", i.Col, ") | ", i.Distance, " | BeforeNode: (", i.BeforeNode.Row, ", ", i.BeforeNode.Col, ") | ", i.BeforeNode.Distance, " | ")
+			#for i in pathToFollow:
+			#	print("(", i.Row, ", ", i.Col, ") | ", i.Distance, " | BeforeNode: (", i.BeforeNode.Row, ", ", i.BeforeNode.Col, ") | ", i.BeforeNode.Distance, " | ")
 			
 			return pathToFollow
 		
@@ -113,7 +111,7 @@ func shortest_path(gameMapMatrix: Array[Array]) -> Array[BreadthFirstSearchNode]
 				rowColDistQueue.append(newCellToPath)
 				nodesToPath.append(newCellToPath)
 	
-	# If no path to destination is found, return -1
+	# If no path to destination is found, return []
 	return []
 
 
@@ -141,31 +139,74 @@ func UpdatePerceptions() -> void:
 	if distanceToPlayer <= ChaseDistance:
 		CurrentState = GameManager.EnemyStates.CHASE
 	elif distanceToPlayer > ChaseDistance and CurrentState == GameManager.EnemyStates.CHASE: # Çok uzaklaştıysa takibi bırak
-			CurrentState = GameManager.EnemyStates.PATROL
+		CurrentState = GameManager.EnemyStates.IDLE
 
 
 func _on_move_timer_timeout() -> void:
 	UpdatePerceptions()
 	
 	if CurrentState == GameManager.EnemyStates.IDLE:
+		print("IDLE")
 		ExecuteIdle()
 	elif CurrentState == GameManager.EnemyStates.PATROL:
+		print("PATROL")
 		ExecutePatrol()
 	elif CurrentState == GameManager.EnemyStates.CHASE:
+		print("CHASE")
 		ExecuteChase()
 
 
 func ExecuteIdle() -> void:
-	pass
+	if IdleTimer.time_left == 0:
+		IdleTimer.start()
 
 
 func ExecutePatrol() -> void:
-	pass
+	if PatrolInProgress == false:
+		PatrolInProgress = true
+		if TillPatrolDistance == 0:
+			TillPatrolDistance = randi_range(MinNodeToPatrol, MaxNodeToPatrol)
+			var patrolDirectionsSize = PatrolDirections.size() - 1
+			print(patrolDirectionsSize)
+			var directionIndexToPatrol: int = randi_range(0, patrolDirectionsSize)
+			MovePatrolDirection = PatrolDirections.pop_at(directionIndexToPatrol)
+			if PatrolDirections.size() <= 0:
+				print(PatrolDirectionsDefault)
+				print(PatrolDirections)
+				PatrolDirections = PatrolDirectionsDefault.duplicate(true)
+		else:
+			# Allow tank movement
+			CanMove = true
+			var instanceId: String = str(get_instance_id())
+			# Use the player's previous position to move
+			GameManager.EnemyTankPositionData[instanceId] += MovePatrolDirection
+			if !check_out_of_bounds(instanceId) or check_wall_collision(instanceId):
+				GameManager.EnemyTankPositionData[instanceId] -= MovePatrolDirection
+			var tween: Tween = create_tween()
+			tween.tween_property(GameManager.EnemyTanks[instanceId], "position", (GameManager.EnemyTankPositionData[instanceId] * GameManager.CellSize) + Vector2(0, GameManager.CellSize) , 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT);
+			(GameManager.EnemyTanks[instanceId].get_node("TankBodySprite") as Sprite2D).global_rotation_degrees = rad_to_deg(MovePatrolDirection.angle()) + 90
+			TillPatrolDistance = TillPatrolDistance - 1
+			if TillPatrolDistance == 0:
+				CurrentState = GameManager.EnemyStates.IDLE
+		PatrolInProgress = false
+	
+func check_out_of_bounds(instanceId: String) -> bool:
+	if (GameManager.EnemyTankPositionData[instanceId].x < 0 
+		or GameManager.EnemyTankPositionData[instanceId].x > GameManager.Cells - 1 
+		or GameManager.EnemyTankPositionData[instanceId].y < 1 
+		or GameManager.EnemyTankPositionData[instanceId].y > GameManager.Cells):
+		return false
+	return true
 
+
+func check_wall_collision(instanceId: String) -> bool:
+	return GameManager.EnemyTankPositionData[instanceId] == GameManager.BaseDoorPositionData
 
 func ExecuteChase() -> void:
-	pass
+	var gameMapMatrix: Array[Array] = calculate_game_map_matrix()
+	shortest_path(gameMapMatrix)
 
 
 func _on_idle_timer_timeout() -> void:
-	pass # Replace with function body.
+	if CurrentState == GameManager.EnemyStates.IDLE:
+		CurrentState = GameManager.EnemyStates.PATROL
